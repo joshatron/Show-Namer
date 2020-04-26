@@ -1,0 +1,5 @@
+.idea/
+target/
+*.iml
+*.swp
+dependency-reduced-pom.xml
