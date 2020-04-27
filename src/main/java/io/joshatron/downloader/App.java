@@ -3,6 +3,10 @@ package io.joshatron.downloader;
 import org.apache.commons.cli.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 public class App {
     public static void main(String[] args) {
@@ -31,16 +35,20 @@ public class App {
             int season = getSeason(cmd.getOptionValue("file"));
             int episode = getEpisode(cmd.getOptionValue("file"));
 
-            TvdbInterface tvdbInterface = new TvdbInterface();
+            Properties properties = new Properties();
+            properties.load(App.class.getClassLoader().getResourceAsStream("application.properties"));
+            TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb-api-key"));
             String episodeName = tvdbInterface.getEpisode(seriesId, season, episode);
             String newName = series + ":" + "S" + getPrettyNumber(season) + "E" + getPrettyNumber(episode)
                     + ":" + episodeName.replace(" ", "_") + ".mkv";
             File newFile = new File(file.getParentFile(), newName);
 
             file.renameTo(newFile);
-        } catch(ParseException e) {
+        } catch(ParseException | FileNotFoundException e) {
             System.out.println(e.getMessage());
             new HelpFormatter().printHelp("Show Namer", options);
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -15,9 +15,10 @@ import java.io.IOException;
 public class TvdbInterface {
 
     private String jwtToken;
-    private String apiKey = "";
+    private String apiKey;
 
-    public TvdbInterface() {
+    public TvdbInterface(String apiKey) {
+        this.apiKey = apiKey;
         getJwtToken();
     }
 

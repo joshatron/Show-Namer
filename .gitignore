@@ -3,3 +3,4 @@ target/
 *.iml
 *.swp
 dependency-reduced-pom.xml
+application.properties
