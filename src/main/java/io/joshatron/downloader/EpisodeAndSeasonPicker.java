@@ -1,11 +1,14 @@
 package io.joshatron.downloader;
 
+import java.io.File;
+
 public class EpisodeAndSeasonPicker {
     public static int getSeason(String fileName) {
         String[] searchStrings = new String[]{"s", "S"};
+        String justFile = removePathFromFileName(fileName);
 
         for(String searchString : searchStrings) {
-            int result = searchNumAfterString(fileName, searchString);
+            int result = searchNumAfterString(justFile, searchString);
 
             if(result != -1) {
                 return result;
@@ -13,6 +16,11 @@ public class EpisodeAndSeasonPicker {
         }
 
         return -1;
+    }
+
+    private static String removePathFromFileName(String fullPath) {
+        File file = new File(fullPath);
+        return file.getName();
     }
 
     private static int searchNumAfterString(String fileName, String searchString) {
