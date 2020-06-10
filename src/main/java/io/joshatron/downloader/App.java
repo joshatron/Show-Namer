@@ -32,7 +32,7 @@ public class App {
             String series = cmd.getOptionValue("series");
             String seriesId = cmd.getOptionValue("seriesId");
             File file = new File(cmd.getOptionValue("file"));
-            int season = getSeason(cmd.getOptionValue("file"));
+            int season = EpisodeAndSeasonPicker.getSeason(cmd.getOptionValue("file"));
             int episode = getEpisode(cmd.getOptionValue("file"));
 
             Properties properties = new Properties();
@@ -50,18 +50,6 @@ public class App {
         } catch(IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static int getSeason(String fileName) {
-        String[] ss = fileName.split("S");
-        for(String s : ss) {
-            int nums = numsStarting(s);
-            if(nums == 1 || nums == 2) {
-                return Integer.parseInt(s.substring(0, nums));
-            }
-        }
-
-        return -1;
     }
 
     private static int getEpisode(String fileName) {

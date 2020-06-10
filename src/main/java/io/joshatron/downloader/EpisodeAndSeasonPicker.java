@@ -4,7 +4,7 @@ import java.io.File;
 
 public class EpisodeAndSeasonPicker {
     public static int getSeason(String fileName) {
-        String[] searchStrings = new String[]{"s", "S"};
+        String[] searchStrings = new String[]{"s", "S", "season", "Season"};
         String justFile = removePathFromFileName(fileName);
 
         for(String searchString : searchStrings) {
@@ -26,22 +26,41 @@ public class EpisodeAndSeasonPicker {
     private static int searchNumAfterString(String fileName, String searchString) {
         String[] ss = fileName.split(searchString);
         for(String s : ss) {
-            int nums = numsStarting(s);
-            if(nums == 1 || nums == 2) {
-                return Integer.parseInt(s.substring(0, nums));
+            int season = getSeasonFromSubstring(s);
+            if(season != -1) {
+                return season;
             }
         }
 
         return -1;
     }
 
-    private static int numsStarting(String str) {
-        for(int i = 0; i < str.length(); i++) {
-            if(!Character.isDigit(str.charAt(i))) {
-                return i;
-            }
+    private static int getSeasonFromSubstring(String str) {
+        int i = 0;
+
+        while(i < str.length() && isWhiteSpace(str.charAt(i))) {
+            i++;
         }
 
-        return str.length();
+        int start = i;
+        int digits = 0;
+        while(i < str.length() && isDigit(str.charAt(i))) {
+            i++;
+            digits++;
+        }
+
+        if(digits > 0) {
+            return Integer.parseInt(str.substring(start, start + digits));
+        }
+
+        return -1;
+    }
+
+    private static boolean isWhiteSpace(char c) {
+        return c == ' ' || c == '_' || c == '-';
+    }
+
+    private static boolean isDigit(char c) {
+        return Character.isDigit(c);
     }
 }

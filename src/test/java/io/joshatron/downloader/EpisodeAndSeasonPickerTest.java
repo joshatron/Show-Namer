@@ -30,6 +30,38 @@ public class EpisodeAndSeasonPickerTest {
     }
 
     @Test
+    public void getSeasonSpaceBetweenSAndNumber() {
+        String file = "/path/to/episode/Show:S 17E1:Episode_Name.mkv";
+        int season = EpisodeAndSeasonPicker.getSeason(file);
+
+        Assert.assertEquals(season, 17);
+    }
+
+    @Test
+    public void getSeasonUnderscoreBetweenSAndNumber() {
+        String file = "/path/to/episode/Show:s_6e1:Episode_Name.mkv";
+        int season = EpisodeAndSeasonPicker.getSeason(file);
+
+        Assert.assertEquals(season, 6);
+    }
+
+    @Test
+    public void getSeasonDashBetweenSeasonAndNumber() {
+        String file = "/path/to/episode/Show:Season- 09e1:Episode_Name.mkv";
+        int season = EpisodeAndSeasonPicker.getSeason(file);
+
+        Assert.assertEquals(season, 9);
+    }
+
+    @Test
+    public void getSeasonLowercaseSeason() {
+        String file = "/path/to/episode/Show:season-002e1:Episode_Name.mkv";
+        int season = EpisodeAndSeasonPicker.getSeason(file);
+
+        Assert.assertEquals(season, 2);
+    }
+
+    @Test
     public void getSeasonWrongEarlierInPath() {
         String file = "";
         if(SystemUtils.IS_OS_WINDOWS) {
