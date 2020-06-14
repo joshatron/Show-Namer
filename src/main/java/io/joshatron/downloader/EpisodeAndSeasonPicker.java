@@ -63,4 +63,8 @@ public class EpisodeAndSeasonPicker {
     private static boolean isDigit(char c) {
         return Character.isDigit(c);
     }
+
+    public static int getEpisode(String file) {
+        return -1;
+    }
 }

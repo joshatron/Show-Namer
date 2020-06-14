@@ -74,4 +74,12 @@ public class EpisodeAndSeasonPickerTest {
 
         Assert.assertEquals(season, 4);
     }
+
+    @Test
+    public void getEpisodeNoWayToKnow() {
+        String file = "/path/to/episode/file.mkv";
+        int episode = EpisodeAndSeasonPicker.getEpisode(file);
+
+        Assert.assertEquals(episode, -1);
+    }
 }
