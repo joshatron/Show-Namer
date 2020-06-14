@@ -82,4 +82,44 @@ public class EpisodeAndSeasonPickerTest {
 
         Assert.assertEquals(episode, -1);
     }
+
+    @Test
+    public void getEpisodeLowercaseE() {
+        String file = "/path/to/episode/Show:s05e06:Episode_Name.mkv";
+        int episode = EpisodeAndSeasonPicker.getEpisode(file);
+
+        Assert.assertEquals(episode, 6);
+    }
+
+    @Test
+    public void getEpisodeUppercaseE() {
+        String file = "/path/to/episode/Show - S02E057.mkv";
+        int episode = EpisodeAndSeasonPicker.getEpisode(file);
+
+        Assert.assertEquals(episode, 57);
+    }
+
+    @Test
+    public void getEpisodeLowercaseEpisode() {
+        String file = "/path/to/episode/Season_05/episode 10- The episode name.mkv";
+        int episode = EpisodeAndSeasonPicker.getEpisode(file);
+
+        Assert.assertEquals(episode, 10);
+    }
+
+    @Test
+    public void getEpisodeUppercaseEpisode() {
+        String file = "/path/to/episode/Season_05/Episode_100-_The_episode_name.mkv";
+        int episode = EpisodeAndSeasonPicker.getEpisode(file);
+
+        Assert.assertEquals(episode, 100);
+    }
+
+    @Test
+    public void getEpisodeOnlyInFileName() {
+        String file = "/path/to/E02/Season_05/E07-_The_episode_name.mkv";
+        int episode = EpisodeAndSeasonPicker.getEpisode(file);
+
+        Assert.assertEquals(episode, 7);
+    }
 }

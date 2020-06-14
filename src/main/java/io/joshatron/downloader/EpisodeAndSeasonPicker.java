@@ -4,11 +4,22 @@ import java.io.File;
 
 public class EpisodeAndSeasonPicker {
     public static int getSeason(String fileName) {
-        String[] searchStrings = new String[]{"s", "S", "season", "Season"};
         String justFile = removePathFromFileName(fileName);
+        String[] searchStrings = new String[]{"s", "S", "season", "Season"};
 
+        return searchStrings(justFile, searchStrings);
+    }
+
+    public static int getEpisode(String fileName) {
+        String justFile = removePathFromFileName(fileName);
+        String[] searchStrings = new String[]{"e", "E", "episode", "Episode"};
+
+        return searchStrings(justFile, searchStrings);
+    }
+
+    private static int searchStrings(String toSearch, String[] searchStrings) {
         for(String searchString : searchStrings) {
-            int result = searchNumAfterString(justFile, searchString);
+            int result = searchNumAfterString(toSearch, searchString);
 
             if(result != -1) {
                 return result;
@@ -62,9 +73,5 @@ public class EpisodeAndSeasonPicker {
 
     private static boolean isDigit(char c) {
         return Character.isDigit(c);
-    }
-
-    public static int getEpisode(String file) {
-        return -1;
     }
 }

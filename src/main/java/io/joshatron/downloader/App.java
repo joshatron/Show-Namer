@@ -33,7 +33,7 @@ public class App {
             String seriesId = cmd.getOptionValue("seriesId");
             File file = new File(cmd.getOptionValue("file"));
             int season = EpisodeAndSeasonPicker.getSeason(cmd.getOptionValue("file"));
-            int episode = getEpisode(cmd.getOptionValue("file"));
+            int episode = EpisodeAndSeasonPicker.getEpisode(cmd.getOptionValue("file"));
 
             Properties properties = new Properties();
             properties.load(App.class.getClassLoader().getResourceAsStream("application.properties"));
@@ -51,28 +51,6 @@ public class App {
             e.printStackTrace();
         }
     }
-
-    private static int getEpisode(String fileName) {
-        String[] es = fileName.split("E");
-        for(String e : es) {
-            int nums = numsStarting(e);
-            if(nums == 1 || nums == 2) {
-                return Integer.parseInt(e.substring(0, nums));
-            }
-        }
-        return 1;
-    }
-
-    private static int numsStarting(String str) {
-        for(int i = 0; i < str.length(); i++) {
-            if(!Character.isDigit(str.charAt(i))) {
-                return i;
-            }
-        }
-
-        return str.length();
-    }
-
 
     private static String getPrettyNumber(int num) {
         if(num < 10) {
