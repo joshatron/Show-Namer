@@ -43,6 +43,8 @@ public class App {
                     + ":" + episodeName.replace(" ", "_") + ".mkv";
             File newFile = new File(file.getParentFile(), newName);
 
+            System.out.println("Renamed " + file.getName() + " to " + newName);
+
             file.renameTo(newFile);
         } catch(ParseException | FileNotFoundException e) {
             System.out.println(e.getMessage());
