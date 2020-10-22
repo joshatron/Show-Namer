@@ -39,7 +39,7 @@ public class App {
             properties.load(App.class.getClassLoader().getResourceAsStream("application.properties"));
             TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb-api-key"));
             String episodeName = tvdbInterface.getEpisode(seriesId, season, episode);
-            String newName = series + ":" + "S" + getPrettyNumber(season) + "E" + getPrettyNumber(episode)
+            String newName = series + ":" + "S" + AppUtils.getPrettyNumber(season) + "E" + AppUtils.getPrettyNumber(episode)
                     + ":" + episodeName.replace(" ", "_") + ".mkv";
             File newFile = new File(file.getParentFile(), newName);
 
@@ -51,15 +51,6 @@ public class App {
             new HelpFormatter().printHelp("Show Namer", options);
         } catch(IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static String getPrettyNumber(int num) {
-        if(num < 10) {
-            return "0" + num;
-        }
-        else {
-            return "" + num;
         }
     }
 }
