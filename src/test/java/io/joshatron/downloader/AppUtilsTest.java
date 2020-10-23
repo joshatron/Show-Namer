@@ -13,4 +13,25 @@ public class AppUtilsTest {
     public void prettyNumberMoreThan10() {
         Assert.assertEquals(AppUtils.getPrettyNumber(12), "12");
     }
+
+    @Test
+    public void getExtensionNormalFile() {
+        Assert.assertEquals(AppUtils.getExtension("file.mkv"), "mkv");
+        Assert.assertEquals(AppUtils.getExtension("other_file.mp4"), "mp4");
+    }
+
+    @Test
+    public void getExtensionMultiplePeriods() {
+        Assert.assertEquals(AppUtils.getExtension("file.name.avi"), "avi");
+    }
+
+    @Test
+    public void getExtensionNoExtenstion() {
+        Assert.assertEquals(AppUtils.getExtension("file_name"), "");
+    }
+
+    @Test
+    public void getExtensionFullFilePath() {
+        Assert.assertEquals(AppUtils.getExtension("/home/user/file/path/file.mkv"), "mkv");
+    }
 }

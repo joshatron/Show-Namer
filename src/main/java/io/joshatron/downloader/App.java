@@ -40,7 +40,7 @@ public class App {
             TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb-api-key"));
             String episodeName = tvdbInterface.getEpisode(seriesId, season, episode);
             String newName = series + ":" + "S" + AppUtils.getPrettyNumber(season) + "E" + AppUtils.getPrettyNumber(episode)
-                    + ":" + episodeName.replace(" ", "_") + ".mkv";
+                    + ":" + episodeName.replace(" ", "_") + "." + AppUtils.getExtension(file.getName());
             File newFile = new File(file.getParentFile(), newName);
 
             System.out.println("Renamed " + file.getName() + " to " + newName);
