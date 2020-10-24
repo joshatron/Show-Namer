@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class TvdbInterface {
 
+    private static final String BASE_URL = "https://api.thetvdb.com/";
+
     private String jwtToken;
     private String apiKey;
 
@@ -22,9 +24,26 @@ public class TvdbInterface {
         getJwtToken();
     }
 
+    public String getSeriesId(String seriesName) {
+        try(CloseableHttpClient client = HttpClients.createDefault()) {
+            String url = BASE_URL + "search/series?name=" + seriesName;
+            HttpGet request = new HttpGet(url);
+            request.setHeader("Authorization", "Bearer " + jwtToken);
+
+            HttpResponse response = client.execute(request);
+            String contents = EntityUtils.toString(response.getEntity());
+            JSONObject json = new JSONObject(contents);
+            return Integer.toString(json.getJSONArray("data").getJSONObject(0).getInt("id"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
     public String getEpisode(String id, int season, int episode) {
         try(CloseableHttpClient client = HttpClients.createDefault()) {
-            String url = "https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season + "&airedEpisode=" + episode;
+            String url = BASE_URL + "series/" + id + "/episodes/query?airedSeason=" + season + "&airedEpisode=" + episode;
             HttpGet request = new HttpGet(url);
             request.setHeader("Authorization", "Bearer " + jwtToken);
 
@@ -37,7 +56,7 @@ public class TvdbInterface {
             e.printStackTrace();
         }
 
-        return null;
+        return "";
     }
 
     private void getJwtToken() {
