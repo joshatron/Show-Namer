@@ -3,7 +3,6 @@ package io.joshatron.downloader;
 import org.apache.commons.cli.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -38,7 +37,7 @@ public class App {
             Properties properties = new Properties();
             properties.load(App.class.getClassLoader().getResourceAsStream("application.properties"));
             TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb-api-key"));
-            String episodeName = tvdbInterface.getEpisode(seriesId, season, episode);
+            String episodeName = tvdbInterface.getEpisodeName(seriesId, season, episode);
             String newName = series + ":" + "S" + AppUtils.getPrettyNumber(season) + "E" + AppUtils.getPrettyNumber(episode)
                     + ":" + episodeName.replace(" ", "_") + "." + AppUtils.getExtension(file.getName());
             File newFile = new File(file.getParentFile(), newName);
