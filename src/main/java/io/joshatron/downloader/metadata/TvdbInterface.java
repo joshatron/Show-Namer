@@ -8,11 +8,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TvdbInterface {
+public class TvdbInterface implements SeriesInterface {
 
     private static final String BASE_URL = "https://api.thetvdb.com/";
 
@@ -24,58 +27,88 @@ public class TvdbInterface {
         getJwtToken();
     }
 
-    public String getSeriesId(String seriesName) {
-        try(CloseableHttpClient client = HttpClients.createDefault()) {
-            String url = BASE_URL + "search/series?name=" + seriesName;
-            HttpGet request = new HttpGet(url);
-            request.setHeader("Authorization", "Bearer " + jwtToken);
+    @Override
+    public List<SeriesInfo> searchSeriesName(String seriesName) {
+        List<SeriesInfo> info = new ArrayList<>();
 
-            HttpResponse response = client.execute(request);
-            String contents = EntityUtils.toString(response.getEntity());
-            JSONObject json = new JSONObject(contents);
-            return Integer.toString(json.getJSONArray("data").getJSONObject(0).getInt("id"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        String url = BASE_URL + "search/series?name=" + seriesName;
+        JSONObject json = makeApiGetCall(url);
+
+        if(json.has("data")) {
+            JSONArray data = json.getJSONArray("data");
+            for(int i = 0; i < data.length(); i++) {
+                info.add(seriesInfoFromJson(data.getJSONObject(i)));
+            }
+
+        }
+
+        return info;
+    }
+
+    @Override
+    public SeriesInfo getSeriesInfo(String seriesId) {
+        String url = BASE_URL + "series/" + seriesId;
+        JSONObject json = makeApiGetCall(url);
+
+        if(json.has("data")) {
+            return seriesInfoFromJson(json.getJSONObject("data"));
+        }
+
+        return new SeriesInfo();
+    }
+
+    private SeriesInfo seriesInfoFromJson(JSONObject json) {
+        SeriesInfo info = new SeriesInfo();
+
+        if(json.has("id")) {
+            info.setSeriesId(Integer.toString(json.getInt("id")));
+        }
+        if(json.has("seriesName")) {
+            info.setSeriesTitle(json.getString("seriesName"));
+        }
+        if(json.has("firstAired")) {
+            info.setStartYear(Integer.parseInt(json.getString("firstAired").substring(0, 4)));
+        }
+
+        return info;
+    }
+
+    @Override
+    public String getEpisodeTitle(String seriesId, int season, int episode) {
+        String url = BASE_URL + "series/" + seriesId + "/episodes/query?"
+                + "airedSeason=" + season + "&airedEpisode=" + episode;
+        JSONObject json = makeApiGetCall(url);
+
+        return getEpisodeTitleFromJson(json);
+    }
+
+    private String getEpisodeTitleFromJson(JSONObject json) {
+        if(json.has("data")) {
+            JSONArray data = json.getJSONArray("data");
+            if(data.length() > 0) {
+                JSONObject value = data.getJSONObject(0);
+                if(value.has("episodeName")) {
+                    return value.getString("episodeName");
+                }
+            }
         }
 
         return "";
     }
 
-    public String generateSeriesName(String seriesId) {
+    private JSONObject makeApiGetCall(String url) {
         try(CloseableHttpClient client = HttpClients.createDefault()) {
-            String url = BASE_URL + "series/" + seriesId;
             HttpGet request = new HttpGet(url);
             request.setHeader("Authorization", "Bearer " + jwtToken);
 
             HttpResponse response = client.execute(request);
             String contents = EntityUtils.toString(response.getEntity());
-            JSONObject json = new JSONObject(contents);
-
-            return json.getJSONObject("data").getString("seriesName").replace(' ', '_') + "." +
-                   json.getJSONObject("data").getString("firstAired").substring(0, 4);
+            return new JSONObject(contents);
         } catch(IOException e) {
             e.printStackTrace();
         }
 
-        return "";
-    }
-
-    public String getEpisodeName(String id, int season, int episode) {
-        try(CloseableHttpClient client = HttpClients.createDefault()) {
-            String url = BASE_URL + "series/" + id + "/episodes/query?airedSeason=" + season + "&airedEpisode=" + episode;
-            HttpGet request = new HttpGet(url);
-            request.setHeader("Authorization", "Bearer " + jwtToken);
-
-            HttpResponse response = client.execute(request);
-            String contents = EntityUtils.toString(response.getEntity());
-            JSONObject json = new JSONObject(contents);
-
-            return json.getJSONArray("data").getJSONObject(0).getString("episodeName");
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
-        return "";
+        return new JSONObject();
     }
 
     private void getJwtToken() {
