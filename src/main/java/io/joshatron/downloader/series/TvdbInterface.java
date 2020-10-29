@@ -1,4 +1,4 @@
-package io.joshatron.downloader.metadata;
+package io.joshatron.downloader.series;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,11 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TvdbInterface implements SeriesInterface {
-
     private static final String BASE_URL = "https://api.thetvdb.com/";
 
+    private final String apiKey;
     private String jwtToken;
-    private String apiKey;
 
     public TvdbInterface(String apiKey) {
         this.apiKey = apiKey;

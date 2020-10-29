@@ -6,15 +6,15 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class EpisodeInfo {
-    private String showName;
+    private String showTitle;
     private int season;
     private int episode;
-    private String episodeName;
+    private String episodeTitle;
 
     public EpisodeInfo() {
-        showName = "";
+        showTitle = "";
         season = 0;
         episode = 0;
-        episodeName = "";
+        episodeTitle = "";
     }
 }

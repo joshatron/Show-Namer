@@ -1,6 +1,6 @@
 package io.joshatron.downloader;
 
-import io.joshatron.downloader.metadata.TvdbInterface;
+import io.joshatron.downloader.series.TvdbInterface;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -44,7 +44,10 @@ public class App {
             int season = EpisodeAndSeasonPicker.getSeason(file.getName());
             int episode = EpisodeAndSeasonPicker.getEpisode(file.getName());
 
-            String episodeName = tvdbInterface.getEpisodeName(seriesId, season, episode);
+            String episodeName = tvdbInterface.getEpisodeTitle(seriesId, season, episode);
+
+            EpisodeInfo episodeInfo = new EpisodeInfo(series, season, episode, episodeName);
+
             String newName = tvdbInterface.generateSeriesName(seriesId) + ":"
                     + "S" + AppUtils.getPrettyNumber(season)
                     + "E" + AppUtils.getPrettyNumber(episode) + ":" +
