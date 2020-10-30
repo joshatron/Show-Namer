@@ -51,24 +51,23 @@ public class App {
                 System.exit(1);
             }
 
-            SeriesInfo info = new SeriesInfo();
+            SeriesInfo info;
             if(seriesId.isEmpty()) {
                 info = tvdbInterface.searchSeriesName(series).get(0);
             } else {
                 info = tvdbInterface.getSeriesInfo(seriesId);
             }
-            String episodeName = tvdbInterface.getEpisodeTitle(seriesId, season, episode);
+            String episodeName = tvdbInterface.getEpisodeTitle(info.getSeriesId(), season, episode);
 
-//            String newName = tvdbInterface.generateSeriesName(seriesId) + ":"
-//                    + "S" + AppUtils.getPrettyNumber(season)
-//                    + "E" + AppUtils.getPrettyNumber(episode) + ":" +
-//                    episodeName.replace(" ", "_")
-//                    + "." + AppUtils.getExtension(file.getName());
-//            File newFile = new File(file.getParentFile(), newName);
-//
-//            System.out.println("Renamed " + file.getName() + " to " + newName);
-//
-//            file.renameTo(newFile);
+            String newName = AppUtils.formatEpisode(info, season, episode, episodeName,
+                    "{seriesTitle}.{seriesYear}:S{season}E{episode}:{episodeTitle}")
+                    .replace(" ", "_") +
+                    "." + AppUtils.getExtension(file.getName());
+            File newFile = new File(file.getParentFile(), newName);
+
+            System.out.println("Renamed " + file.getName() + " to " + newName);
+
+            file.renameTo(newFile);
         } catch(ParseException | FileNotFoundException e) {
             System.out.println(e.getMessage());
             new HelpFormatter().printHelp("Show Namer", options);

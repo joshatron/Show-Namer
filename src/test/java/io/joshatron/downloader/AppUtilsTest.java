@@ -41,9 +41,75 @@ public class AppUtilsTest {
         String format = "hello world";
         SeriesInfo info = new SeriesInfo("A", "B", 1);
         int season = 1;
-        int episode = 1;
+        int episode = 2;
         String episodeTitle = "C";
         Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
-                format);
+                            format);
+    }
+
+    @Test
+    public void formatEpisodeSubSeriesTitle() {
+        String format = "hello {seriesTitle} world";
+        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        int season = 1;
+        int episode = 2;
+        String episodeTitle = "C";
+        Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
+                   "hello B world");
+    }
+
+    @Test
+    public void formatEpisodeSubEpisodeTitle() {
+        String format = "hello {episodeTitle} world";
+        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        int season = 1;
+        int episode = 2;
+        String episodeTitle = "C";
+        Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
+                   "hello C world");
+    }
+
+    @Test
+    public void formatEpisodeSubSeasonNumber() {
+        String format = "hello S{season} world";
+        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        int season = 1;
+        int episode = 2;
+        String episodeTitle = "C";
+        Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
+                   "hello S01 world");
+    }
+
+    @Test
+    public void formatEpisodeSubEpisodeNumber() {
+        String format = "hello E{episode} world";
+        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        int season = 1;
+        int episode = 2;
+        String episodeTitle = "C";
+        Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
+                   "hello E02 world");
+    }
+
+    @Test
+    public void formatEpisodeSubShowYear() {
+        String format = "hello {seriesYear} world";
+        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        int season = 1;
+        int episode = 2;
+        String episodeTitle = "C";
+        Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
+                   "hello 1 world");
+    }
+
+    @Test
+    public void formatEpisodeSubMultiple() {
+        String format = "{seriesTitle}.{seriesYear}:S{season}E{episode}:{episodeTitle}";
+        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        int season = 1;
+        int episode = 2;
+        String episodeTitle = "C";
+        Assert.assertEquals(AppUtils.formatEpisode(info, season, episode, episodeTitle, format),
+                   "B.1:S01E02:C");
     }
 }

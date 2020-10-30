@@ -21,6 +21,11 @@ public class AppUtils {
     }
 
     public static String formatEpisode(SeriesInfo series, int season, int episode, String episodeTitle, String format) {
-        return format;
+        return format
+                .replace("{seriesTitle}", series.getSeriesTitle())
+                .replace("{seriesYear}", Integer.toString(series.getStartYear()))
+                .replace("{episodeTitle}", episodeTitle)
+                .replace("{season}", getPrettyNumber(season))
+                .replace("{episode}", getPrettyNumber(episode));
     }
 }
