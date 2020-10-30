@@ -1,5 +1,7 @@
 package io.joshatron.downloader;
 
+import io.joshatron.downloader.series.SeriesInfo;
+
 public class AppUtils {
     public static String getPrettyNumber(int num) {
         if(num < 10) {
@@ -16,5 +18,9 @@ public class AppUtils {
         }
 
         return "";
+    }
+
+    public static String formatEpisode(SeriesInfo series, int season, int episode, String episodeTitle, String format) {
+        return format;
     }
 }

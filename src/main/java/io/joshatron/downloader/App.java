@@ -1,5 +1,6 @@
 package io.joshatron.downloader;
 
+import io.joshatron.downloader.series.SeriesInfo;
 import io.joshatron.downloader.series.TvdbInterface;
 import org.apache.commons.cli.*;
 
@@ -13,7 +14,7 @@ public class App {
         Options options = new Options();
 
         Option seriesOption = new Option("s", "series", true, "Series name");
-        seriesOption.setRequired(true);
+        seriesOption.setRequired(false);
         options.addOption(seriesOption);
 
         Option seriesIdOption = new Option("id", "seriesId", true, "TVDB series ID");
@@ -33,31 +34,41 @@ public class App {
 
             CommandLine cmd = parser.parse(options, args);
 
-            String series = cmd.getOptionValue("series");
+            String series = "";
+            if(cmd.hasOption("series")) {
+                series = cmd.getOptionValue("series");
+            }
             File file = new File(cmd.getOptionValue("file"));
             String seriesId = "";
             if(cmd.hasOption("seriesId")) {
                 seriesId = cmd.getOptionValue("seriesId");
-            } else {
-                seriesId = tvdbInterface.getSeriesId(series.replace(" ", "_"));
             }
             int season = EpisodeAndSeasonPicker.getSeason(file.getName());
             int episode = EpisodeAndSeasonPicker.getEpisode(file.getName());
 
+            if(series.isEmpty() && seriesId.isEmpty()) {
+                System.out.println("You need to enter either the series or the series ID.");
+                System.exit(1);
+            }
+
+            SeriesInfo info = new SeriesInfo();
+            if(seriesId.isEmpty()) {
+                info = tvdbInterface.searchSeriesName(series).get(0);
+            } else {
+                info = tvdbInterface.getSeriesInfo(seriesId);
+            }
             String episodeName = tvdbInterface.getEpisodeTitle(seriesId, season, episode);
 
-            EpisodeInfo episodeInfo = new EpisodeInfo(series, season, episode, episodeName);
-
-            String newName = tvdbInterface.generateSeriesName(seriesId) + ":"
-                    + "S" + AppUtils.getPrettyNumber(season)
-                    + "E" + AppUtils.getPrettyNumber(episode) + ":" +
-                    episodeName.replace(" ", "_")
-                    + "." + AppUtils.getExtension(file.getName());
-            File newFile = new File(file.getParentFile(), newName);
-
-            System.out.println("Renamed " + file.getName() + " to " + newName);
-
-            file.renameTo(newFile);
+//            String newName = tvdbInterface.generateSeriesName(seriesId) + ":"
+//                    + "S" + AppUtils.getPrettyNumber(season)
+//                    + "E" + AppUtils.getPrettyNumber(episode) + ":" +
+//                    episodeName.replace(" ", "_")
+//                    + "." + AppUtils.getExtension(file.getName());
+//            File newFile = new File(file.getParentFile(), newName);
+//
+//            System.out.println("Renamed " + file.getName() + " to " + newName);
+//
+//            file.renameTo(newFile);
         } catch(ParseException | FileNotFoundException e) {
             System.out.println(e.getMessage());
             new HelpFormatter().printHelp("Show Namer", options);
