@@ -1,6 +1,7 @@
 package io.joshatron.downloader;
 
 import io.joshatron.downloader.formatter.EpisodeFormatter;
+import io.joshatron.downloader.formatter.EpisodeMetadata;
 import io.joshatron.downloader.series.SeriesInfo;
 import io.joshatron.downloader.series.TvdbInterface;
 import org.apache.commons.cli.*;
@@ -63,7 +64,7 @@ public class App {
             String format = "{seriesTitle}.{seriesYear}:S{season}E{episode}:{episodeTitle}";
             EpisodeFormatter formatter = new EpisodeFormatter(format);
 
-            String newName = formatter.formatEpisode(info, season, episode, episodeName).replace(" ", "_") +
+            String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)).replace(" ", "_") +
                     "." + AppUtils.getExtension(file.getName());
             File newFile = new File(file.getParentFile(), newName);
 
