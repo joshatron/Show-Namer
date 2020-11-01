@@ -61,10 +61,10 @@ public class App {
             }
             String episodeName = tvdbInterface.getEpisodeTitle(info.getSeriesId(), season, episode);
 
-            String format = "{seriesTitle}.{seriesYear}:S{season}E{episode}:{episodeTitle}";
+            String format = "{seriesTitle.replace(' ', '_'}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle.replace(' ', '_'}";
             EpisodeFormatter formatter = new EpisodeFormatter(format);
 
-            String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)).replace(" ", "_") +
+            String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)) +
                     "." + AppUtils.getExtension(file.getName());
             File newFile = new File(file.getParentFile(), newName);
 
