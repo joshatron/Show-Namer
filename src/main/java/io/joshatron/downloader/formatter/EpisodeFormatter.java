@@ -4,18 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EpisodeFormatter {
-    private String format;
+    private List<FormatPart> formatParts;
 
     public EpisodeFormatter(String format) {
-        this.format = format;
-    }
-
-    public String formatEpisode(EpisodeMetadata metadata) {
-        return separate(format).stream()
-                .map(p -> formatPartToString(p, metadata))
-                .reduce(String::concat)
-                .orElse("");
-
+        this.formatParts = separate(format);
     }
 
     private List<FormatPart> separate(String format) {
@@ -42,6 +34,13 @@ public class EpisodeFormatter {
         }
 
         return parts;
+    }
+
+    public String formatEpisode(EpisodeMetadata metadata) {
+        return formatParts.stream()
+                .map(p -> formatPartToString(p, metadata))
+                .reduce(String::concat)
+                .orElse("");
     }
 
     private String formatPartToString(FormatPart part, EpisodeMetadata metadata) {

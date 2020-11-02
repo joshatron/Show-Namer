@@ -27,6 +27,10 @@ public class App {
         fileOption.setRequired(true);
         options.addOption(fileOption);
 
+        Option formatOption = new Option("fo", "format", true, "File to parse");
+        formatOption.setRequired(false);
+        options.addOption(fileOption);
+
         CommandLineParser parser = new DefaultParser();
 
         try {
@@ -35,6 +39,12 @@ public class App {
             TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb-api-key"));
 
             CommandLine cmd = parser.parse(options, args);
+
+            String format = "{seriesTitle.replace(' ', '_'}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle.replace(' ', '_'}";
+            if(cmd.hasOption("format")) {
+                format = cmd.getOptionValue("format");
+            }
+            EpisodeFormatter formatter = new EpisodeFormatter(format);
 
             String series = "";
             if(cmd.hasOption("series")) {
@@ -60,9 +70,6 @@ public class App {
                 info = tvdbInterface.getSeriesInfo(seriesId);
             }
             String episodeName = tvdbInterface.getEpisodeTitle(info.getSeriesId(), season, episode);
-
-            String format = "{seriesTitle.replace(' ', '_'}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle.replace(' ', '_'}";
-            EpisodeFormatter formatter = new EpisodeFormatter(format);
 
             String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)) +
                     "." + AppUtils.getExtension(file.getName());
