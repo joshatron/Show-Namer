@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class FormatPart {
-    private boolean special = false;
+    private boolean special;
     private String value;
 }
