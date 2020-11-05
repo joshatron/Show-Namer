@@ -36,11 +36,11 @@ public class App {
         try {
             Properties properties = new Properties();
             properties.load(App.class.getClassLoader().getResourceAsStream("application.properties"));
-            TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb-api-key"));
+            TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb.api-key"));
 
             CommandLine cmd = parser.parse(options, args);
 
-            String format = "{seriesTitle.replace(' ', '_'}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle.replace(' ', '_'}";
+            String format = properties.getProperty("format.episode");
             if(cmd.hasOption("format")) {
                 format = cmd.getOptionValue("format");
             }
