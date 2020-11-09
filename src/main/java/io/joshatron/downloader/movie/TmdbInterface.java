@@ -37,7 +37,8 @@ public class TmdbInterface implements MovieInteface {
 
     @Override
     public MovieInfo getMovieInfo(String movieId) {
-        return null;
+        JSONObject json = makeApiGetCall(BASE_URL + "movie/" + movieId);
+        return jsonToMovieInfo(json);
     }
 
     private MovieInfo jsonToMovieInfo(JSONObject movieJson) {

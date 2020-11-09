@@ -22,6 +22,17 @@ public class TmdbInterfaceTest {
         Assert.assertFalse(movies.get(0).getMovieDescription().isEmpty());
     }
 
+    @Test
+    public void getMovieInfo() {
+        TmdbInterface tmdb = getInterface();
+
+        MovieInfo info = tmdb.getMovieInfo("121");
+        Assert.assertEquals(info.getMovieId(), "121");
+        Assert.assertEquals(info.getMovieTitle(), "The Lord of the Rings: The Two Towers");
+        Assert.assertEquals(info.getMovieYear(), 2002);
+        Assert.assertFalse(info.getMovieDescription().isEmpty());
+    }
+
     private TmdbInterface getInterface() {
         try {
             Properties properties = new Properties();
