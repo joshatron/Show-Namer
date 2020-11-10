@@ -1,5 +1,7 @@
 package io.joshatron.downloader.movie;
 
+import io.joshatron.downloader.series.SeriesInfo;
+import io.joshatron.downloader.series.SeriesInterface;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -12,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TmdbInterface implements MovieInteface {
+public class TmdbInterface implements MovieInteface, SeriesInterface {
     private String BASE_URL = "https://api.themoviedb.org/3/";
 
     private String apiKey;
@@ -66,5 +68,40 @@ public class TmdbInterface implements MovieInteface {
         }
 
         return new JSONObject();
+    }
+
+    @Override
+    public List<SeriesInfo> searchSeriesName(String seriesName) {
+        JSONObject json = makeApiGetCall(BASE_URL + "search/tv?query=" + seriesName);
+
+        List<SeriesInfo> info = new ArrayList<>();
+        JSONArray series = json.getJSONArray("results");
+
+        for(int i = 0; i < series.length(); i++) {
+            info.add(jsonToSeriesInfo(series.getJSONObject(i)));
+        }
+
+        return info;
+    }
+
+    @Override
+    public SeriesInfo getSeriesInfo(String seriesId) {
+        return null;
+    }
+
+    @Override
+    public String getEpisodeTitle(String seriesId, int season, int episode) {
+        return null;
+    }
+
+    private SeriesInfo jsonToSeriesInfo(JSONObject movieJson) {
+        SeriesInfo info = new SeriesInfo();
+        info.setSeriesId(Integer.toString(movieJson.getInt("id")));
+        info.setSeriesTitle(movieJson.getString("name"));
+        if(movieJson.getString("first_air_date").length() >= 4) {
+            info.setStartYear(Integer.parseInt(movieJson.getString("first_air_date").substring(0, 4)));
+        }
+
+        return info;
     }
 }
