@@ -86,12 +86,15 @@ public class TmdbInterface implements MovieInteface, SeriesInterface {
 
     @Override
     public SeriesInfo getSeriesInfo(String seriesId) {
-        return null;
+        JSONObject json = makeApiGetCall(BASE_URL + "tv/" + seriesId);
+        return jsonToSeriesInfo(json);
     }
 
     @Override
     public String getEpisodeTitle(String seriesId, int season, int episode) {
-        return null;
+        JSONObject json = makeApiGetCall(BASE_URL + "tv/" + seriesId + "/season/" + season + "/episode/" + episode);
+
+        return json.getString("name");
     }
 
     private SeriesInfo jsonToSeriesInfo(JSONObject movieJson) {
