@@ -1,6 +1,7 @@
 package io.joshatron.downloader.movie;
 
 import io.joshatron.downloader.App;
+import io.joshatron.downloader.series.SeriesInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -31,6 +32,16 @@ public class TmdbInterfaceTest {
         Assert.assertEquals(info.getMovieTitle(), "The Lord of the Rings: The Two Towers");
         Assert.assertEquals(info.getMovieYear(), 2002);
         Assert.assertFalse(info.getMovieDescription().isEmpty());
+    }
+
+    @Test
+    public void searchSeriesInfo() {
+        TmdbInterface tmdb = getInterface();
+
+        List<SeriesInfo> series = tmdb.searchSeriesName("Modern Family");
+        Assert.assertEquals(series.get(0).getSeriesId(), "1421");
+        Assert.assertEquals(series.get(0).getSeriesTitle(), "Modern Family");
+        Assert.assertEquals(series.get(0).getStartYear(), 2009);
     }
 
     private TmdbInterface getInterface() {

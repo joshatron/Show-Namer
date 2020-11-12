@@ -25,7 +25,7 @@ public class TmdbInterface implements MovieInteface, SeriesInterface {
 
     @Override
     public List<MovieInfo> searchMovieName(String movieName) {
-        JSONObject json = makeApiGetCall(BASE_URL + "search/movie?query=" + movieName);
+        JSONObject json = makeApiGetCall(BASE_URL + "search/movie?query=" + replaceIllegalCharacters(movieName));
 
         List<MovieInfo> info = new ArrayList<>();
         JSONArray movies = json.getJSONArray("results");
@@ -35,6 +35,10 @@ public class TmdbInterface implements MovieInteface, SeriesInterface {
         }
 
         return info;
+    }
+
+    private String replaceIllegalCharacters(String original) {
+        return original.replace(" ", "%20");
     }
 
     @Override
@@ -72,7 +76,7 @@ public class TmdbInterface implements MovieInteface, SeriesInterface {
 
     @Override
     public List<SeriesInfo> searchSeriesName(String seriesName) {
-        JSONObject json = makeApiGetCall(BASE_URL + "search/tv?query=" + seriesName);
+        JSONObject json = makeApiGetCall(BASE_URL + "search/tv?query=" + replaceIllegalCharacters(seriesName));
 
         List<SeriesInfo> info = new ArrayList<>();
         JSONArray series = json.getJSONArray("results");
