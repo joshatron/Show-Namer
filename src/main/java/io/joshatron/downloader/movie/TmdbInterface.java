@@ -101,12 +101,13 @@ public class TmdbInterface implements MovieInteface, SeriesInterface {
         return json.getString("name");
     }
 
-    private SeriesInfo jsonToSeriesInfo(JSONObject movieJson) {
+    private SeriesInfo jsonToSeriesInfo(JSONObject seriesJson) {
         SeriesInfo info = new SeriesInfo();
-        info.setSeriesId(Integer.toString(movieJson.getInt("id")));
-        info.setSeriesTitle(movieJson.getString("name"));
-        if(movieJson.getString("first_air_date").length() >= 4) {
-            info.setStartYear(Integer.parseInt(movieJson.getString("first_air_date").substring(0, 4)));
+        info.setSeriesId(Integer.toString(seriesJson.getInt("id")));
+        info.setSeriesTitle(seriesJson.getString("name"));
+        info.setSeriesDescription(seriesJson.getString("overview"));
+        if(seriesJson.getString("first_air_date").length() >= 4) {
+            info.setStartYear(Integer.parseInt(seriesJson.getString("first_air_date").substring(0, 4)));
         }
 
         return info;

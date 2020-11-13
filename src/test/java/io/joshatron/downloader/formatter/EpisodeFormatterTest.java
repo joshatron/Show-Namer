@@ -9,7 +9,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeNoSubs() {
         String format = "hello world";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -21,7 +21,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeSubSeriesTitle() {
         String format = "hello {seriesTitle} world";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -33,7 +33,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeSubEpisodeTitle() {
         String format = "hello {episodeTitle} world";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -45,7 +45,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeSubSeasonNumber() {
         String format = "hello S{seasonNumber} world";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -57,7 +57,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeSubEpisodeNumber() {
         String format = "hello E{episodeNumber} world";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -69,7 +69,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeSubShowYear() {
         String format = "hello {seriesYear} world";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -81,7 +81,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeSubMultiple() {
         String format = "{seriesTitle}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle}";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B", 1);
+        SeriesInfo info = new SeriesInfo("A", "B", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
@@ -93,7 +93,7 @@ public class EpisodeFormatterTest {
     public void formatEpisodeWithReplaceMacro() {
         String format = "{seriesTitle.replace(' ', '_')}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle.replace(' ','-'}";
         EpisodeFormatter formatter = new EpisodeFormatter(format);
-        SeriesInfo info = new SeriesInfo("A", "B C", 1);
+        SeriesInfo info = new SeriesInfo("A", "B C", "D", 1);
         int season = 1;
         int episode = 2;
         String episodeTitle = "D E";
