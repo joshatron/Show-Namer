@@ -42,6 +42,7 @@ public class TmdbInterfaceTest {
         Assert.assertEquals(series.get(0).getSeriesId(), "1421");
         Assert.assertEquals(series.get(0).getSeriesTitle(), "Modern Family");
         Assert.assertEquals(series.get(0).getStartYear(), 2009);
+        Assert.assertFalse(series.get(0).getSeriesDescription().isEmpty());
     }
 
     private TmdbInterface getInterface() {

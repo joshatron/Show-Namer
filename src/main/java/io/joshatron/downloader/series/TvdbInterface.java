@@ -68,6 +68,9 @@ public class TvdbInterface implements SeriesInterface {
         if(json.has("firstAired")) {
             info.setStartYear(Integer.parseInt(json.getString("firstAired").substring(0, 4)));
         }
+        if(json.has("overview")) {
+            info.setSeriesDescription(json.getString("overview"));
+        }
 
         return info;
     }
