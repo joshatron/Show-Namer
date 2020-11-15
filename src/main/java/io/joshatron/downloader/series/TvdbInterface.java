@@ -30,7 +30,7 @@ public class TvdbInterface implements SeriesInterface {
     public List<SeriesInfo> searchSeriesName(String seriesName) {
         List<SeriesInfo> info = new ArrayList<>();
 
-        String url = BASE_URL + "search/series?name=" + seriesName;
+        String url = BASE_URL + "search/series?name=" + replaceIllegalCharacters(seriesName);
         JSONObject json = makeApiGetCall(url);
 
         if(json.has("data")) {
@@ -42,6 +42,10 @@ public class TvdbInterface implements SeriesInterface {
         }
 
         return info;
+    }
+
+    private String replaceIllegalCharacters(String original) {
+        return original.replace(" ", "%20");
     }
 
     @Override

@@ -14,7 +14,7 @@ public class TvdbInterfaceTest {
     public void searchSeriesName() {
         TvdbInterface tvdb = getInterface();
 
-        List<SeriesInfo> series = tvdb.searchSeriesName("Modern_Family");
+        List<SeriesInfo> series = tvdb.searchSeriesName("Modern Family");
         Assert.assertFalse(series.isEmpty());
         Assert.assertEquals(series.get(0).getSeriesId(), "95011");
         Assert.assertEquals(series.get(0).getSeriesTitle(), "Modern Family");
