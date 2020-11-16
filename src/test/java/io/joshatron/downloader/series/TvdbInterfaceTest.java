@@ -22,6 +22,17 @@ public class TvdbInterfaceTest {
         Assert.assertFalse(series.get(0).getSeriesDescription().isEmpty());
     }
 
+    @Test
+    public void getSeriesInfo() {
+        TvdbInterface tvdb = getInterface();
+
+        SeriesInfo info = tvdb.getSeriesInfo("95011");
+        Assert.assertEquals(info.getSeriesId(), "95011");
+        Assert.assertEquals(info.getSeriesTitle(), "Modern Family");
+        Assert.assertEquals(info.getStartYear(), 2009);
+        Assert.assertFalse(info.getSeriesDescription().isEmpty());
+    }
+
     private TvdbInterface getInterface() {
         try {
             Properties properties = new Properties();
