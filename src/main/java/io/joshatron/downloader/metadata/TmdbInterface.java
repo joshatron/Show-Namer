@@ -1,7 +1,5 @@
-package io.joshatron.downloader.movie;
+package io.joshatron.downloader.metadata;
 
-import io.joshatron.downloader.series.SeriesInfo;
-import io.joshatron.downloader.series.SeriesInterface;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;

@@ -1,6 +1,8 @@
 package io.joshatron.downloader.series;
 
 import io.joshatron.downloader.App;
+import io.joshatron.downloader.metadata.SeriesInfo;
+import io.joshatron.downloader.metadata.TvdbInterface;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

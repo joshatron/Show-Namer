@@ -2,8 +2,8 @@ package io.joshatron.downloader;
 
 import io.joshatron.downloader.formatter.EpisodeFormatter;
 import io.joshatron.downloader.formatter.EpisodeMetadata;
-import io.joshatron.downloader.series.SeriesInfo;
-import io.joshatron.downloader.series.TvdbInterface;
+import io.joshatron.downloader.metadata.SeriesInfo;
+import io.joshatron.downloader.metadata.TvdbInterface;
 import org.apache.commons.cli.*;
 
 import java.io.File;

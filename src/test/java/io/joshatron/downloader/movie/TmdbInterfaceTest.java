@@ -1,7 +1,9 @@
 package io.joshatron.downloader.movie;
 
 import io.joshatron.downloader.App;
-import io.joshatron.downloader.series.SeriesInfo;
+import io.joshatron.downloader.metadata.MovieInfo;
+import io.joshatron.downloader.metadata.TmdbInterface;
+import io.joshatron.downloader.metadata.SeriesInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
