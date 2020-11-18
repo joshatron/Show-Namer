@@ -9,7 +9,9 @@ import org.apache.commons.cli.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class App {
     public static void main(String[] args) {
@@ -23,13 +25,9 @@ public class App {
         seriesIdOption.setRequired(false);
         options.addOption(seriesIdOption);
 
-        Option fileOption = new Option("f", "file", true, "File to parse");
-        fileOption.setRequired(true);
-        options.addOption(fileOption);
-
         Option formatOption = new Option("fo", "format", true, "File to parse");
         formatOption.setRequired(false);
-        options.addOption(fileOption);
+        options.addOption(formatOption);
 
         CommandLineParser parser = new DefaultParser();
 
@@ -50,37 +48,46 @@ public class App {
             if(cmd.hasOption("series")) {
                 series = cmd.getOptionValue("series");
             }
-            File file = new File(cmd.getOptionValue("file"));
             String seriesId = "";
-            if(cmd.hasOption("seriesId")) {
+            if (cmd.hasOption("seriesId")) {
                 seriesId = cmd.getOptionValue("seriesId");
             }
-            int season = EpisodeAndSeasonPicker.getSeason(file.getName());
-            int episode = EpisodeAndSeasonPicker.getEpisode(file.getName());
 
-            if(series.isEmpty() && seriesId.isEmpty()) {
+            if (series.isEmpty() && seriesId.isEmpty()) {
                 System.out.println("You need to enter either the series or the series ID.");
                 System.exit(1);
             }
 
             SeriesInfo info;
-            if(seriesId.isEmpty()) {
+            if (seriesId.isEmpty()) {
                 info = tvdbInterface.searchSeriesName(series).get(0);
             } else {
                 info = tvdbInterface.getSeriesInfo(seriesId);
             }
-            String episodeName = tvdbInterface.getEpisodeTitle(info.getSeriesId(), season, episode);
 
-            String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)) +
-                    "." + AppUtils.getExtension(file.getName());
-            File newFile = new File(file.getParentFile(), newName);
+            List<File> files = cmd.getArgList().stream().map(File::new).collect(Collectors.toList());
 
-            System.out.println("Renamed " + file.getName() + " to " + newName);
+            for(File file : files) {
+                int season = EpisodeAndSeasonPicker.getSeason(file.getName());
+                int episode = EpisodeAndSeasonPicker.getEpisode(file.getName());
 
-            file.renameTo(newFile);
+                if(season != -1 && episode != -1) {
+                    String episodeName = tvdbInterface.getEpisodeTitle(info.getSeriesId(), season, episode);
+
+                    String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)) +
+                            "." + AppUtils.getExtension(file.getName());
+                    File newFile = new File(file.getParentFile(), newName);
+
+                    System.out.println("Renamed " + file.getName() + " to " + newName);
+
+                    file.renameTo(newFile);
+                } else {
+                    System.out.println("Failed to determine season and episode for " + file.getName());
+                }
+            }
         } catch(ParseException | FileNotFoundException e) {
             System.out.println(e.getMessage());
-            new HelpFormatter().printHelp("Show Namer", options);
+            new HelpFormatter().printHelp("Show Namer [OPTIONS] <FILE(S)>", options);
         } catch(IOException e) {
             e.printStackTrace();
         }
