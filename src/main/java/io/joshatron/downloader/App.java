@@ -1,6 +1,6 @@
 package io.joshatron.downloader;
 
-import io.joshatron.downloader.formatter.EpisodeFormatter;
+import io.joshatron.downloader.formatter.Formatter;
 import io.joshatron.downloader.formatter.EpisodeMetadata;
 import io.joshatron.downloader.metadata.SeriesInfo;
 import io.joshatron.downloader.metadata.SeriesInterface;
@@ -45,7 +45,7 @@ public class App {
             if(cmd.hasOption("format")) {
                 format = cmd.getOptionValue("format");
             }
-            EpisodeFormatter formatter = new EpisodeFormatter(format);
+            Formatter formatter = new Formatter(format);
 
             String series = "";
             if(cmd.hasOption("series")) {

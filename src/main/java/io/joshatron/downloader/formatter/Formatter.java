@@ -3,10 +3,10 @@ package io.joshatron.downloader.formatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EpisodeFormatter {
+public class Formatter {
     private List<FormatPart> formatParts;
 
-    public EpisodeFormatter(String format) {
+    public Formatter(String format) {
         this.formatParts = separate(format);
     }
 
