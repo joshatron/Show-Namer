@@ -3,7 +3,7 @@ package io.joshatron.downloader;
 import io.joshatron.downloader.formatter.EpisodeFormatter;
 import io.joshatron.downloader.formatter.EpisodeMetadata;
 import io.joshatron.downloader.metadata.SeriesInfo;
-import io.joshatron.downloader.metadata.TvdbInterface;
+import io.joshatron.downloader.metadata.SeriesInterface;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -21,7 +21,7 @@ public class App {
         seriesOption.setRequired(false);
         options.addOption(seriesOption);
 
-        Option seriesIdOption = new Option("id", "seriesId", true, "TVDB series ID");
+        Option seriesIdOption = new Option("id", "seriesId", true, "Series ID");
         seriesIdOption.setRequired(false);
         options.addOption(seriesIdOption);
 
@@ -29,12 +29,15 @@ public class App {
         formatOption.setRequired(false);
         options.addOption(formatOption);
 
+        Option metadataOption = new Option("m", "metadata", true, "Metadata backend to use (tvdb|tmdb)");
+        metadataOption.setRequired(false);
+        options.addOption(metadataOption);
+
         CommandLineParser parser = new DefaultParser();
 
         try {
             Properties properties = new Properties();
             properties.load(App.class.getClassLoader().getResourceAsStream("application.properties"));
-            TvdbInterface tvdbInterface = new TvdbInterface(properties.getProperty("tvdb.api-key"));
 
             CommandLine cmd = parser.parse(options, args);
 
@@ -53,6 +56,14 @@ public class App {
                 seriesId = cmd.getOptionValue("seriesId");
             }
 
+            SeriesInterface metadata;
+            if(cmd.hasOption("metadata")) {
+                metadata = AppUtils.seriesInterfaceFromOption(cmd.getOptionValue("metadata"));
+            } else {
+                metadata = AppUtils.seriesInterfaceFromOption("TVDB");
+            }
+
+
             if (series.isEmpty() && seriesId.isEmpty()) {
                 System.out.println("You need to enter either the series or the series ID.");
                 System.exit(1);
@@ -60,9 +71,9 @@ public class App {
 
             SeriesInfo info;
             if (seriesId.isEmpty()) {
-                info = tvdbInterface.searchSeriesName(series).get(0);
+                info = metadata.searchSeriesName(series).get(0);
             } else {
-                info = tvdbInterface.getSeriesInfo(seriesId);
+                info = metadata.getSeriesInfo(seriesId);
             }
 
             List<File> files = cmd.getArgList().stream().map(File::new).collect(Collectors.toList());
@@ -72,7 +83,7 @@ public class App {
                 int episode = EpisodeAndSeasonPicker.getEpisode(file.getName());
 
                 if(season != -1 && episode != -1) {
-                    String episodeName = tvdbInterface.getEpisodeTitle(info.getSeriesId(), season, episode);
+                    String episodeName = metadata.getEpisodeTitle(info.getSeriesId(), season, episode);
 
                     String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)) +
                             "." + AppUtils.getExtension(file.getName());
