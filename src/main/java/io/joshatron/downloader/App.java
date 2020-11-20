@@ -1,7 +1,7 @@
 package io.joshatron.downloader;
 
 import io.joshatron.downloader.formatter.Formatter;
-import io.joshatron.downloader.formatter.EpisodeMetadata;
+import io.joshatron.downloader.metadata.EpisodeInfo;
 import io.joshatron.downloader.metadata.SeriesInfo;
 import io.joshatron.downloader.metadata.SeriesInterface;
 import org.apache.commons.cli.*;
@@ -85,7 +85,7 @@ public class App {
                 if(season != -1 && episode != -1) {
                     String episodeName = metadata.getEpisodeTitle(info.getSeriesId(), season, episode);
 
-                    String newName = formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeName)) +
+                    String newName = formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeName)) +
                             "." + AppUtils.getExtension(file.getName());
                     File newFile = new File(file.getParentFile(), newName);
 

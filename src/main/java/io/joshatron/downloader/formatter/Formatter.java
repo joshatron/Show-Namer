@@ -1,5 +1,8 @@
 package io.joshatron.downloader.formatter;
 
+import io.joshatron.downloader.metadata.EpisodeInfo;
+import io.joshatron.downloader.metadata.MovieInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,17 +39,17 @@ public class Formatter {
         return parts;
     }
 
-    public String formatEpisode(EpisodeMetadata metadata) {
+    public String formatEpisode(EpisodeInfo info) {
         return formatParts.stream()
-                .map(p -> formatPartToString(p, metadata))
+                .map(p -> formatEpisodePartToString(p, info))
                 .reduce(String::concat)
                 .orElse("");
     }
 
-    private String formatPartToString(FormatPart part, EpisodeMetadata metadata) {
+    private String formatEpisodePartToString(FormatPart part, EpisodeInfo metadata) {
         String value;
         if(part.isSpecial()) {
-            value = doSubstitution(part.getValue(), metadata);
+            value = doEpisodeSubstitution(part.getValue(), metadata);
 
             value = doReplacement(part.getValue(), value);
         } else {
@@ -56,21 +59,52 @@ public class Formatter {
         return value;
     }
 
-    private String doSubstitution(String value, EpisodeMetadata metadata) {
+    private String doEpisodeSubstitution(String value, EpisodeInfo info) {
         if(value.startsWith("seriesTitle")) {
-            return metadata.getSeriesInfo().getSeriesTitle();
+            return info.getSeriesInfo().getSeriesTitle();
         }
         if(value.startsWith("seriesYear")) {
-            return Integer.toString(metadata.getSeriesInfo().getStartYear());
+            return Integer.toString(info.getSeriesInfo().getStartYear());
         }
         if(value.startsWith("seasonNumber")) {
-            return getPrettyNumber(metadata.getSeason());
+            return getPrettyNumber(info.getSeason());
         }
         if(value.startsWith("episodeNumber")) {
-            return getPrettyNumber(metadata.getEpisode());
+            return getPrettyNumber(info.getEpisode());
         }
         if(value.startsWith("episodeTitle")) {
-            return metadata.getEpisodeTitle();
+            return info.getEpisodeTitle();
+        }
+
+        return "";
+    }
+
+    public String formatMovie(MovieInfo info) {
+        return formatParts.stream()
+                .map(p -> formatMoviePartToString(p, info))
+                .reduce(String::concat)
+                .orElse("");
+    }
+
+    private String formatMoviePartToString(FormatPart part, MovieInfo info) {
+        String value;
+        if(part.isSpecial()) {
+            value = doMovieSubstitution(part.getValue(), info);
+
+            value = doReplacement(part.getValue(), value);
+        } else {
+            value = part.getValue();
+        }
+
+        return value;
+    }
+
+    private String doMovieSubstitution(String value, MovieInfo info) {
+        if(value.startsWith("movieTitle")) {
+            return info.getMovieTitle();
+        }
+        if(value.startsWith("movieYear")) {
+            return Integer.toString(info.getMovieYear());
         }
 
         return "";

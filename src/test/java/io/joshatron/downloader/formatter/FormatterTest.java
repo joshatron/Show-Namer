@@ -1,5 +1,6 @@
 package io.joshatron.downloader.formatter;
 
+import io.joshatron.downloader.metadata.EpisodeInfo;
 import io.joshatron.downloader.metadata.SeriesInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,7 +14,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 format);
     }
 
@@ -25,7 +26,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "hello B world");
     }
 
@@ -37,7 +38,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "hello C world");
     }
 
@@ -49,7 +50,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "hello S01 world");
     }
 
@@ -61,7 +62,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "hello E02 world");
     }
 
@@ -73,7 +74,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "hello 1 world");
     }
 
@@ -85,7 +86,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "C";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "B.1:S01E02:C");
     }
 
@@ -97,7 +98,7 @@ public class FormatterTest {
         int season = 1;
         int episode = 2;
         String episodeTitle = "D E";
-        Assert.assertEquals(formatter.formatEpisode(new EpisodeMetadata(info, season, episode, episodeTitle)),
+        Assert.assertEquals(formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeTitle)),
                 "B_C.1:S01E02:D-E");
     }
 }
