@@ -21,15 +21,23 @@ public class App {
         seriesOption.setRequired(false);
         options.addOption(seriesOption);
 
-        Option seriesIdOption = new Option("id", "seriesId", true, "Series ID");
+        Option seriesIdOption = new Option("sid", "seriesId", true, "Series ID");
         seriesIdOption.setRequired(false);
         options.addOption(seriesIdOption);
+
+        Option movieOption = new Option("m", "movie", true, "Movie name");
+        movieOption.setRequired(false);
+        options.addOption(movieOption);
+
+        Option movieIdOption = new Option("mid", "movieId", true, "Movie ID");
+        movieIdOption.setRequired(false);
+        options.addOption(movieIdOption);
 
         Option formatOption = new Option("fo", "format", true, "File to parse");
         formatOption.setRequired(false);
         options.addOption(formatOption);
 
-        Option metadataOption = new Option("m", "metadata", true, "Metadata backend to use (tvdb|tmdb)");
+        Option metadataOption = new Option("b", "backend", true, "Metadata backend to use (tvdb|tmdb)");
         metadataOption.setRequired(false);
         options.addOption(metadataOption);
 
