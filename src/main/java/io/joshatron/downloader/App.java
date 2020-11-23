@@ -14,31 +14,7 @@ import java.util.stream.Collectors;
 
 public class App {
     public static void main(String[] args) {
-        Options options = new Options();
-
-        Option seriesOption = new Option("s", "series", true, "Series name");
-        seriesOption.setRequired(false);
-        options.addOption(seriesOption);
-
-        Option seriesIdOption = new Option("sid", "seriesId", true, "Series ID");
-        seriesIdOption.setRequired(false);
-        options.addOption(seriesIdOption);
-
-        Option movieOption = new Option("m", "movie", true, "Movie name");
-        movieOption.setRequired(false);
-        options.addOption(movieOption);
-
-        Option movieIdOption = new Option("mid", "movieId", true, "Movie ID");
-        movieIdOption.setRequired(false);
-        options.addOption(movieIdOption);
-
-        Option formatOption = new Option("fo", "format", true, "File to parse");
-        formatOption.setRequired(false);
-        options.addOption(formatOption);
-
-        Option metadataOption = new Option("b", "backend", true, "Metadata backend to use (tvdb|tmdb)");
-        metadataOption.setRequired(false);
-        options.addOption(metadataOption);
+        Options options = getOptions();
 
         CommandLineParser parser = new DefaultParser();
 
@@ -54,13 +30,13 @@ public class App {
                 renameMovie(properties, cmd);
             } else {
                 System.out.println("You need to enter either info about the series/movie.");
+                new HelpFormatter().printHelp("Show Namer [OPTIONS] <FILE(S)>", options);
                 System.exit(1);
             }
-        } catch(ParseException | FileNotFoundException e) {
-            System.out.println(e.getMessage());
-            new HelpFormatter().printHelp("Show Namer [OPTIONS] <FILE(S)>", options);
-        } catch(IOException e) {
+        } catch(Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
             e.printStackTrace();
+            new HelpFormatter().printHelp("Show Namer [OPTIONS] <FILE(S)>", options);
         }
     }
 
@@ -80,18 +56,18 @@ public class App {
             seriesId = cmd.getOptionValue("seriesId");
         }
 
-        SeriesInterface metadata;
+        SeriesInterface backend;
         if(cmd.hasOption("backend")) {
-            metadata = AppUtils.seriesInterfaceFromOption(cmd.getOptionValue("backend"));
+            backend = AppUtils.seriesInterfaceFromOption(cmd.getOptionValue("backend"));
         } else {
-            metadata = AppUtils.seriesInterfaceFromOption("TVDB");
+            backend = AppUtils.seriesInterfaceFromOption("TVDB");
         }
 
         SeriesInfo info;
         if(seriesId.isEmpty()) {
-            info = metadata.searchSeriesName(series).get(0);
+            info = backend.searchSeriesName(series).get(0);
         } else {
-            info = metadata.getSeriesInfo(seriesId);
+            info = backend.getSeriesInfo(seriesId);
         }
 
         List<File> files = cmd.getArgList().stream().map(File::new).collect(Collectors.toList());
@@ -101,7 +77,7 @@ public class App {
             int episode = EpisodeAndSeasonPicker.getEpisode(file.getName());
 
             if(season != -1 && episode != -1) {
-                String episodeName = metadata.getEpisodeTitle(info.getSeriesId(), season, episode);
+                String episodeName = backend.getEpisodeTitle(info.getSeriesId(), season, episode);
 
                 String newName = formatter.formatEpisode(new EpisodeInfo(info, season, episode, episodeName)) +
                         "." + AppUtils.getExtension(file.getName());
@@ -132,18 +108,18 @@ public class App {
             movieId = cmd.getOptionValue("movieId");
         }
 
-        MovieInteface metadata;
+        MovieInteface backend;
         if(cmd.hasOption("backend")) {
-            metadata = AppUtils.movieInterfaceFromOption(cmd.getOptionValue("backend"));
+            backend = AppUtils.movieInterfaceFromOption(cmd.getOptionValue("backend"));
         } else {
-            metadata = AppUtils.movieInterfaceFromOption("TMDB");
+            backend = AppUtils.movieInterfaceFromOption("TMDB");
         }
 
         MovieInfo info;
         if(movieId.isEmpty()) {
-            info = metadata.searchMovieName(movie).get(0);
+            info = backend.searchMovieName(movie).get(0);
         } else {
-            info = metadata.getMovieInfo(movieId);
+            info = backend.getMovieInfo(movieId);
         }
 
         List<File> files = cmd.getArgList().stream().map(File::new).collect(Collectors.toList());
@@ -156,5 +132,35 @@ public class App {
 
             file.renameTo(newFile);
         }
+    }
+
+    private static Options getOptions() {
+        Options options = new Options();
+
+        Option seriesOption = new Option("s", "series", true, "Series name");
+        seriesOption.setRequired(false);
+        options.addOption(seriesOption);
+
+        Option seriesIdOption = new Option("sid", "seriesId", true, "Series ID");
+        seriesIdOption.setRequired(false);
+        options.addOption(seriesIdOption);
+
+        Option movieOption = new Option("m", "movie", true, "Movie name");
+        movieOption.setRequired(false);
+        options.addOption(movieOption);
+
+        Option movieIdOption = new Option("mid", "movieId", true, "Movie ID");
+        movieIdOption.setRequired(false);
+        options.addOption(movieIdOption);
+
+        Option formatOption = new Option("fo", "format", true, "File to parse");
+        formatOption.setRequired(false);
+        options.addOption(formatOption);
+
+        Option metadataOption = new Option("b", "backend", true, "Metadata backend to use (tvdb|tmdb)");
+        metadataOption.setRequired(false);
+        options.addOption(metadataOption);
+
+        return options;
     }
 }
