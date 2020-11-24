@@ -1,4 +1,4 @@
-package io.joshatron.downloader.metadata;
+package io.joshatron.downloader.backend;
 
 import java.util.List;
 

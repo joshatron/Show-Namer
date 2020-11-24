@@ -1,4 +1,4 @@
-package io.joshatron.downloader.metadata;
+package io.joshatron.downloader.backend;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;

@@ -1,7 +1,7 @@
 package io.joshatron.downloader.formatter;
 
-import io.joshatron.downloader.metadata.EpisodeInfo;
-import io.joshatron.downloader.metadata.SeriesInfo;
+import io.joshatron.downloader.backend.EpisodeInfo;
+import io.joshatron.downloader.backend.SeriesInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

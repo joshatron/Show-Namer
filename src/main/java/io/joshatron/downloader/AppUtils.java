@@ -1,9 +1,9 @@
 package io.joshatron.downloader;
 
-import io.joshatron.downloader.metadata.MovieInteface;
-import io.joshatron.downloader.metadata.SeriesInterface;
-import io.joshatron.downloader.metadata.TmdbInterface;
-import io.joshatron.downloader.metadata.TvdbInterface;
+import io.joshatron.downloader.backend.MovieInteface;
+import io.joshatron.downloader.backend.SeriesInterface;
+import io.joshatron.downloader.backend.TmdbInterface;
+import io.joshatron.downloader.backend.TvdbInterface;
 
 import java.io.IOException;
 import java.util.Properties;

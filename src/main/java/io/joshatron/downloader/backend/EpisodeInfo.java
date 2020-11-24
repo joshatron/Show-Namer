@@ -1,6 +1,5 @@
-package io.joshatron.downloader.metadata;
+package io.joshatron.downloader.backend;
 
-import io.joshatron.downloader.metadata.SeriesInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

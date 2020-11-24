@@ -1,13 +1,11 @@
 package io.joshatron.downloader;
 
 import io.joshatron.downloader.formatter.Formatter;
-import io.joshatron.downloader.metadata.*;
-import io.joshatron.downloader.metadata.EpisodeInfo;
+import io.joshatron.downloader.backend.*;
+import io.joshatron.downloader.backend.EpisodeInfo;
 import org.apache.commons.cli.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -27,7 +25,7 @@ public class App {
             if(cmd.hasOption("series") || cmd.hasOption("seriesId")) {
                 renameEpisodes(properties, cmd);
             } else if(cmd.hasOption("movie") || cmd.hasOption("movieId")) {
-                renameMovie(properties, cmd);
+                renameMovies(properties, cmd);
             } else {
                 System.out.println("You need to enter either info about the series/movie.");
                 new HelpFormatter().printHelp("Show Namer [OPTIONS] <FILE(S)>", options);
@@ -92,7 +90,7 @@ public class App {
         }
     }
 
-    private static void renameMovie(Properties properties, CommandLine cmd) {
+    private static void renameMovies(Properties properties, CommandLine cmd) {
         String format = properties.getProperty("format.movie");
         if(cmd.hasOption("format")) {
             format = cmd.getOptionValue("format");

@@ -1,7 +1,7 @@
 package io.joshatron.downloader.formatter;
 
-import io.joshatron.downloader.metadata.EpisodeInfo;
-import io.joshatron.downloader.metadata.MovieInfo;
+import io.joshatron.downloader.backend.EpisodeInfo;
+import io.joshatron.downloader.backend.MovieInfo;
 
 import java.util.ArrayList;
 import java.util.List;
