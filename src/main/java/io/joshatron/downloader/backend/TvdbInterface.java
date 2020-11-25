@@ -38,7 +38,6 @@ public class TvdbInterface implements SeriesInterface {
             for(int i = 0; i < data.length(); i++) {
                 info.add(seriesInfoFromJson(data.getJSONObject(i)));
             }
-
         }
 
         return info;

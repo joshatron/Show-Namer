@@ -4,6 +4,8 @@ import io.joshatron.downloader.backend.MovieInteface;
 import io.joshatron.downloader.backend.SeriesInterface;
 import io.joshatron.downloader.backend.TmdbInterface;
 import io.joshatron.downloader.backend.TvdbInterface;
+import io.joshatron.downloader.exception.NamerException;
+import io.joshatron.downloader.exception.NamerExceptionReason;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -27,11 +29,11 @@ public class AppUtils {
             } else if (option.equalsIgnoreCase("TMDB")) {
                 return new TmdbInterface(properties.getProperty("tmdb.api-key"));
             } else {
-                throw new RuntimeException();
+                throw new NamerException(NamerExceptionReason.BACKEND_NOT_RECOGNIZED);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new NamerException(NamerExceptionReason.FAILED_TO_LOAD_PROPERTIES);
         }
     }
 
@@ -43,11 +45,11 @@ public class AppUtils {
             if (option.equalsIgnoreCase("TMDB")) {
                 return new TmdbInterface(properties.getProperty("tmdb.api-key"));
             } else {
-                throw new RuntimeException();
+                throw new NamerException(NamerExceptionReason.BACKEND_NOT_RECOGNIZED);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new NamerException(NamerExceptionReason.FAILED_TO_LOAD_PROPERTIES);
         }
     }
 }
