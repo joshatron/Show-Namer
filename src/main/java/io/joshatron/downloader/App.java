@@ -11,6 +11,19 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class App {
+
+    private static final String SERIES_OPTION = "series";
+    private static final String SERIES_ID_OPTION = "seriesId";
+    private static final String MOVIE_OPTION = "movie";
+    private static final String MOVIE_ID_OPTION = "movieId";
+    private static final String FORMAT_OPTION = "format";
+    private static final String FORMAT_SERIES_PROPERTY = "format.episode";
+    private static final String FORMAT_MOVIE_PROPERTY = "format.movie";
+    private static final String BACKEND_OPTION = "backend";
+
+    private static final String DEFAULT_EPISODE_FORMAT = "{seriesTitle.replace(' ', '_'}.{seriesYear}:S{seasonNumber}E{episodeNumber}:{episodeTitle.replace(' ', '_'}";
+    private static final String DEFAULT_MOVIE_FORMAT = "{movieTitle.replace(' ', '_'}.{movieYear}";
+
     public static void main(String[] args) {
         Options options = getOptions();
 
@@ -22,9 +35,9 @@ public class App {
 
             CommandLine cmd = parser.parse(options, args);
 
-            if(cmd.hasOption("series") || cmd.hasOption("seriesId")) {
+            if(cmd.hasOption(SERIES_OPTION) || cmd.hasOption(SERIES_ID_OPTION)) {
                 renameEpisodes(properties, cmd);
-            } else if(cmd.hasOption("movie") || cmd.hasOption("movieId")) {
+            } else if(cmd.hasOption(MOVIE_OPTION) || cmd.hasOption(MOVIE_ID_OPTION)) {
                 renameMovies(properties, cmd);
             } else {
                 System.out.println("You need to enter either info about the series/movie.");
@@ -39,24 +52,27 @@ public class App {
     }
 
     private static void renameEpisodes(Properties properties, CommandLine cmd) {
-        String format = properties.getProperty("format.episode");
-        if(cmd.hasOption("format")) {
-            format = cmd.getOptionValue("format");
+        String format = DEFAULT_EPISODE_FORMAT;
+        if(!properties.getProperty(FORMAT_SERIES_PROPERTY).isEmpty()) {
+            format = properties.getProperty(FORMAT_SERIES_PROPERTY);
+        }
+        if(cmd.hasOption(FORMAT_OPTION)) {
+            format = cmd.getOptionValue(FORMAT_OPTION);
         }
         Formatter formatter = new Formatter(format);
 
         String series = "";
-        if(cmd.hasOption("series")) {
-            series = cmd.getOptionValue("series");
+        if(cmd.hasOption(SERIES_OPTION)) {
+            series = cmd.getOptionValue(SERIES_OPTION);
         }
         String seriesId = "";
-        if(cmd.hasOption("seriesId")) {
-            seriesId = cmd.getOptionValue("seriesId");
+        if(cmd.hasOption(SERIES_ID_OPTION)) {
+            seriesId = cmd.getOptionValue(SERIES_ID_OPTION);
         }
 
         SeriesInterface backend;
-        if(cmd.hasOption("backend")) {
-            backend = AppUtils.seriesInterfaceFromOption(cmd.getOptionValue("backend"));
+        if(cmd.hasOption(BACKEND_OPTION)) {
+            backend = AppUtils.seriesInterfaceFromOption(cmd.getOptionValue(BACKEND_OPTION));
         } else {
             backend = AppUtils.seriesInterfaceFromOption("TVDB");
         }
@@ -91,24 +107,27 @@ public class App {
     }
 
     private static void renameMovies(Properties properties, CommandLine cmd) {
-        String format = properties.getProperty("format.movie");
-        if(cmd.hasOption("format")) {
-            format = cmd.getOptionValue("format");
+        String format = DEFAULT_MOVIE_FORMAT;
+        if(!properties.getProperty(FORMAT_MOVIE_PROPERTY).isEmpty()) {
+            format = properties.getProperty(FORMAT_MOVIE_PROPERTY);
+        }
+        if(cmd.hasOption(FORMAT_OPTION)) {
+            format = cmd.getOptionValue(FORMAT_OPTION);
         }
         Formatter formatter = new Formatter(format);
 
         String movie = "";
-        if(cmd.hasOption("movie")) {
-            movie = cmd.getOptionValue("movie");
+        if(cmd.hasOption(MOVIE_OPTION)) {
+            movie = cmd.getOptionValue(MOVIE_OPTION);
         }
         String movieId = "";
-        if(cmd.hasOption("movieId")) {
-            movieId = cmd.getOptionValue("movieId");
+        if(cmd.hasOption(MOVIE_ID_OPTION)) {
+            movieId = cmd.getOptionValue(MOVIE_ID_OPTION);
         }
 
         MovieInteface backend;
-        if(cmd.hasOption("backend")) {
-            backend = AppUtils.movieInterfaceFromOption(cmd.getOptionValue("backend"));
+        if(cmd.hasOption(BACKEND_OPTION)) {
+            backend = AppUtils.movieInterfaceFromOption(cmd.getOptionValue(BACKEND_OPTION));
         } else {
             backend = AppUtils.movieInterfaceFromOption("TMDB");
         }
@@ -135,27 +154,27 @@ public class App {
     private static Options getOptions() {
         Options options = new Options();
 
-        Option seriesOption = new Option("s", "series", true, "Series name");
+        Option seriesOption = new Option("s", SERIES_OPTION, true, "Series name");
         seriesOption.setRequired(false);
         options.addOption(seriesOption);
 
-        Option seriesIdOption = new Option("sid", "seriesId", true, "Series ID");
+        Option seriesIdOption = new Option("sid", SERIES_ID_OPTION, true, "Series ID");
         seriesIdOption.setRequired(false);
         options.addOption(seriesIdOption);
 
-        Option movieOption = new Option("m", "movie", true, "Movie name");
+        Option movieOption = new Option("m", MOVIE_OPTION, true, "Movie name");
         movieOption.setRequired(false);
         options.addOption(movieOption);
 
-        Option movieIdOption = new Option("mid", "movieId", true, "Movie ID");
+        Option movieIdOption = new Option("mid", MOVIE_ID_OPTION, true, "Movie ID");
         movieIdOption.setRequired(false);
         options.addOption(movieIdOption);
 
-        Option formatOption = new Option("fo", "format", true, "File to parse");
+        Option formatOption = new Option("fo", FORMAT_OPTION, true, "File to parse");
         formatOption.setRequired(false);
         options.addOption(formatOption);
 
-        Option metadataOption = new Option("b", "backend", true, "Metadata backend to use (tvdb|tmdb)");
+        Option metadataOption = new Option("b", BACKEND_OPTION, true, "Metadata backend to use (tvdb|tmdb)");
         metadataOption.setRequired(false);
         options.addOption(metadataOption);
 
