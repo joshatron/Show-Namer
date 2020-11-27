@@ -5,7 +5,10 @@ import io.joshatron.downloader.backend.*;
 import io.joshatron.downloader.backend.EpisodeInfo;
 import org.apache.commons.cli.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -79,7 +82,7 @@ public class App {
 
         SeriesInfo info;
         if(seriesId.isEmpty()) {
-            info = backend.searchSeriesName(series).get(0);
+            info = pickSeriesOption(backend.searchSeriesName(series));
         } else {
             info = backend.getSeriesInfo(seriesId);
         }
@@ -179,5 +182,28 @@ public class App {
         options.addOption(metadataOption);
 
         return options;
+    }
+
+    private static SeriesInfo pickSeriesOption(List<SeriesInfo> infos) {
+        System.out.println("Multiple matches found, please choose a below option:");
+
+        int i = 1;
+        for(SeriesInfo info : infos) {
+            System.out.println(i + ") " + info.getSeriesTitle() + ", " + info.getStartYear() + ", " + info.getSeriesDescription());
+            i++;
+        }
+
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+            System.out.print("Choice: ");
+            int option = Integer.parseInt(br.readLine().trim());
+
+            return infos.get(option - 1);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return new SeriesInfo();
     }
 }
