@@ -82,7 +82,16 @@ public class App {
 
         SeriesInfo info;
         if(seriesId.isEmpty()) {
-            info = pickSeriesOption(backend.searchSeriesName(series));
+            List<SeriesInfo> options = backend.searchSeriesName(series);
+            int option = pickObviousOption(series, options.stream()
+                    .map(SeriesInfo::getSeriesTitle)
+                    .collect(Collectors.toList()));
+            if(option == -1) {
+                option = pickOption(options.stream()
+                        .map(o -> o.getSeriesTitle() + " (" + o.getSeriesId() + "), " + o.getStartYear() + ": " + o.getSeriesDescription())
+                        .collect(Collectors.toList()));
+            }
+            info = options.get(option);
         } else {
             info = backend.getSeriesInfo(seriesId);
         }
@@ -137,7 +146,16 @@ public class App {
 
         MovieInfo info;
         if(movieId.isEmpty()) {
-            info = backend.searchMovieName(movie).get(0);
+            List<MovieInfo> options = backend.searchMovieName(movie);
+            int option = pickObviousOption(movie, options.stream()
+                .map(MovieInfo::getMovieTitle)
+                .collect(Collectors.toList()));
+            if(option == -1) {
+                option = pickOption(options.stream()
+                        .map(o -> o.getMovieTitle() + " (" + o.getMovieId() + "), " + o.getMovieYear() + ": " + o.getMovieDescription())
+                        .collect(Collectors.toList()));
+            }
+            info = options.get(option);
         } else {
             info = backend.getMovieInfo(movieId);
         }
@@ -184,12 +202,27 @@ public class App {
         return options;
     }
 
-    private static SeriesInfo pickSeriesOption(List<SeriesInfo> infos) {
-        System.out.println("Multiple matches found, please choose a below option:");
+    private static int pickObviousOption(String search, List<String> titles) {
+        int choice = -1;
+        for(int i = 0; i < titles.size(); i++) {
+            if(search.equalsIgnoreCase(titles.get(i))) {
+                if(choice == -1) {
+                    choice = i;
+                } else {
+                    return -1;
+                }
+            }
+        }
+
+        return choice;
+    }
+
+    private static int pickOption(List<String> options) {
+        System.out.println("Multiple matches found, please choose from below options:");
 
         int i = 1;
-        for(SeriesInfo info : infos) {
-            System.out.println(i + ") " + info.getSeriesTitle() + ", " + info.getStartYear() + ", " + info.getSeriesDescription());
+        for(String option : options) {
+            System.out.println(i + ") " + option);
             i++;
         }
 
@@ -199,11 +232,11 @@ public class App {
             System.out.print("Choice: ");
             int option = Integer.parseInt(br.readLine().trim());
 
-            return infos.get(option - 1);
+            return option - 1;
         } catch(IOException e) {
             e.printStackTrace();
         }
 
-        return new SeriesInfo();
+        return -1;
     }
 }
