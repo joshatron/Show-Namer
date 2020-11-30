@@ -83,14 +83,14 @@ public class App {
         SeriesInfo info;
         if(seriesId.isEmpty()) {
             List<SeriesInfo> options = backend.searchSeriesName(series);
-            int option = pickObviousOption(series, options.stream()
-                    .map(SeriesInfo::getSeriesTitle)
-                    .collect(Collectors.toList()));
-            if(option == -1) {
-                option = pickOption(options.stream()
-                        .map(o -> o.getSeriesTitle() + " (" + o.getSeriesId() + "), " + o.getStartYear() + ": " + o.getSeriesDescription())
-                        .collect(Collectors.toList()));
-            }
+            int option = OptionPicker.pickOption(series,
+                    options.stream()
+                            .map(SeriesInfo::getSeriesTitle)
+                            .collect(Collectors.toList()),
+                    options.stream()
+                            .map(o -> o.getSeriesTitle() + " (" + o.getSeriesId() + "), " + o.getStartYear() + ": " + o.getSeriesDescription())
+                            .collect(Collectors.toList()));
+
             info = options.get(option);
         } else {
             info = backend.getSeriesInfo(seriesId);
@@ -147,14 +147,14 @@ public class App {
         MovieInfo info;
         if(movieId.isEmpty()) {
             List<MovieInfo> options = backend.searchMovieName(movie);
-            int option = pickObviousOption(movie, options.stream()
-                .map(MovieInfo::getMovieTitle)
-                .collect(Collectors.toList()));
-            if(option == -1) {
-                option = pickOption(options.stream()
+            int option = OptionPicker.pickOption(movie,
+                    options.stream()
+                            .map(MovieInfo::getMovieTitle)
+                            .collect(Collectors.toList()),
+                options.stream()
                         .map(o -> o.getMovieTitle() + " (" + o.getMovieId() + "), " + o.getMovieYear() + ": " + o.getMovieDescription())
                         .collect(Collectors.toList()));
-            }
+
             info = options.get(option);
         } else {
             info = backend.getMovieInfo(movieId);
@@ -200,43 +200,5 @@ public class App {
         options.addOption(metadataOption);
 
         return options;
-    }
-
-    private static int pickObviousOption(String search, List<String> titles) {
-        int choice = -1;
-        for(int i = 0; i < titles.size(); i++) {
-            if(search.equalsIgnoreCase(titles.get(i))) {
-                if(choice == -1) {
-                    choice = i;
-                } else {
-                    return -1;
-                }
-            }
-        }
-
-        return choice;
-    }
-
-    private static int pickOption(List<String> options) {
-        System.out.println("Multiple matches found, please choose from below options:");
-
-        int i = 1;
-        for(String option : options) {
-            System.out.println(i + ") " + option);
-            i++;
-        }
-
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            System.out.print("Choice: ");
-            int option = Integer.parseInt(br.readLine().trim());
-
-            return option - 1;
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
     }
 }
