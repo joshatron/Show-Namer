@@ -83,13 +83,7 @@ public class App {
         SeriesInfo info;
         if(seriesId.isEmpty()) {
             List<SeriesInfo> options = backend.searchSeriesName(series);
-            int option = OptionPicker.pickOption(series,
-                    options.stream()
-                            .map(SeriesInfo::getSeriesTitle)
-                            .collect(Collectors.toList()),
-                    options.stream()
-                            .map(o -> o.getSeriesTitle() + " (" + o.getSeriesId() + "), " + o.getStartYear() + ": " + o.getSeriesDescription())
-                            .collect(Collectors.toList()));
+            int option = OptionPicker.pickOptionSeries(series, options);
 
             info = options.get(option);
         } else {
@@ -147,13 +141,7 @@ public class App {
         MovieInfo info;
         if(movieId.isEmpty()) {
             List<MovieInfo> options = backend.searchMovieName(movie);
-            int option = OptionPicker.pickOption(movie,
-                    options.stream()
-                            .map(MovieInfo::getMovieTitle)
-                            .collect(Collectors.toList()),
-                options.stream()
-                        .map(o -> o.getMovieTitle() + " (" + o.getMovieId() + "), " + o.getMovieYear() + ": " + o.getMovieDescription())
-                        .collect(Collectors.toList()));
+            int option = OptionPicker.pickOptionMovie(movie, options);
 
             info = options.get(option);
         } else {
