@@ -68,7 +68,7 @@ public class TvdbInterface implements SeriesInterface {
         if(json.has("seriesName")) {
             info.setSeriesTitle(json.getString("seriesName"));
         }
-        if(json.has("firstAired")) {
+        if(json.has("firstAired") && !json.getString("firstAired").isEmpty()) {
             info.setStartYear(Integer.parseInt(json.getString("firstAired").substring(0, 4)));
         }
         if(json.has("overview")) {
